@@ -1,0 +1,62 @@
+[
+  {
+    "question": "Who wrote the Sinead O`Connor hit &#039;Nothing Compares 2 U&#039;?",
+    "correct_answer": "Prince",
+    "incorrect_answers": [
+      "Michael Jackson",
+      "Cameo",
+      "Rick James",
+      "Pajama Sam"
+    ]
+  },
+  {
+    "question": "Which of these musicals won the Tony Award for Best Musical?",
+    "correct_answer": "Rent",
+    "incorrect_answers": [
+      "The Color Purple",
+      "American Idiot",
+      "Newsies",
+      "Freddi Fish"
+    ]
+  },
+  {
+    "question": "Which of these is NOT a Humongous Entertainment game franchise?",
+    "correct_answer": "Commander Keen",
+    "incorrect_answers": [
+      "Pajama Sam",
+      "Putt-Putt",
+      "Freddi Fish",
+      "Hell King"
+    ]
+  },
+  {
+    "question": "In Dota 2, Wraith King was previously known as...",
+    "correct_answer": "Skeleton King",
+    "incorrect_answers": [
+      "Reaper King",
+      "Skull King",
+      "Hell King",
+      "Putt-Putt"
+    ]
+  },
+  {
+    "question": "In the video game &quot;Team Fortress 2&quot;, which class is able to double jump?",
+    "correct_answer": "Scout",
+    "incorrect_answers": [
+      "Spy",
+      "Engineer",
+      "Pyro",
+      "Doctor"
+    ]
+  },
+  {
+    "question": "What is the name of the City in Saints Row The Third?",
+    "correct_answer": "Steelport",
+    "incorrect_answers": [
+      "Stilwater",
+      "Carcer",
+      "Liberty",
+      "New-York"
+    ]
+  }
+]

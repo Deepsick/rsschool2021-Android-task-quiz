@@ -13,7 +13,6 @@ import androidx.core.view.get
 import com.rsschool.quiz.databinding.FragmentQuizBinding
 import com.rsschool.quiz.model.Question
 import java.lang.IllegalArgumentException
-import kotlin.random.Random
 
 class QuestionFragment : Fragment() {
     private var _binding: FragmentQuizBinding? = null
@@ -21,7 +20,8 @@ class QuestionFragment : Fragment() {
     private var listener: QuestionFragmentListener? = null
 
     interface QuestionFragmentListener {
-        fun onSubmit(answer: String)
+        fun onSubmit()
+        fun onRadioChecked(answer: String)
         fun onBackButtonPressed()
     }
 
@@ -40,18 +40,22 @@ class QuestionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        inflater.context.setTheme(getThemeId())
+        arguments?.let {
+            val questionNumber = it.getInt(QUESTION_NUMBER)
+            inflater.context.setTheme(getThemeId(questionNumber))
+        }
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    private fun getThemeId(): Int {
-        return when (Random.nextInt(1, 5)) {
+    private fun getThemeId(questionNumber: Int): Int {
+        return when (questionNumber) {
             1 -> R.style.Theme_Quiz_First
             2 -> R.style.Theme_Quiz_Second
             3 -> R.style.Theme_Quiz_Third
             4 -> R.style.Theme_Quiz_Fourth
+            5 -> R.style.Theme_Quiz_Fifth
+            6 -> R.style.Theme_Quiz_Sixth
             else -> throw IllegalArgumentException("Incorrect theme number")
         }
     }
@@ -62,7 +66,7 @@ class QuestionFragment : Fragment() {
         questionNumber: Int,
         isLastQuestion: Boolean
     ) {
-        updateQuestion(question, answer, isLastQuestion)
+        updateQuestion(question, answer, isLastQuestion, questionNumber)
         updateToolbar(questionNumber)
         if (answer == null) {
             enableSubmit(false)
@@ -74,16 +78,17 @@ class QuestionFragment : Fragment() {
         binding.nextButton.isEnabled = isEnabled
     }
 
-    private fun updateQuestion(question: Question, answer: String?, isLastQuestion: Boolean) {
-        if (question.incorrectAnswers == null || question.correctAnswer == null) {
+    private fun updateQuestion(
+        question: Question,
+        answer: String?,
+        isLastQuestion: Boolean,
+        questionNumber: Int
+    ) {
+        if (question.answers == null || question.correctAnswer == null) {
             return
         }
         val options = mutableListOf<String>()
-        options.apply {
-            addAll(question.incorrectAnswers)
-            add(question.correctAnswer)
-            shuffle()
-        }
+        options.addAll(question.answers)
         binding.question.text = question.text
         options.forEachIndexed { index, option ->
             val radioButton = binding.radioGroup[index] as RadioButton
@@ -95,6 +100,9 @@ class QuestionFragment : Fragment() {
         }
         if (isLastQuestion) {
             binding.nextButton.text = getString(R.string.last_question_button_name)
+        }
+        if (isFirstQuestion(questionNumber)) {
+            binding.previousButton.isEnabled = false
         }
     }
 
@@ -113,12 +121,13 @@ class QuestionFragment : Fragment() {
         binding.toolbar.title = "Question $questionNumber"
         if (isFirstQuestion(questionNumber)) {
             binding.toolbar.navigationIcon = null
-            binding.previousButton.isEnabled = false
         }
     }
 
     private fun setListeners(questionNumber: Int) {
         binding.radioGroup.setOnCheckedChangeListener { _, _ ->
+            val answer = getCheckedAnswer()
+            listener?.onRadioChecked(answer)
             enableSubmit(true)
         }
         binding.previousButton.setOnClickListener {
@@ -136,8 +145,7 @@ class QuestionFragment : Fragment() {
         }
 
         binding.nextButton.setOnClickListener {
-            listener?.onSubmit(getCheckedAnswer())
-            binding.radioGroup.clearCheck()
+            listener?.onSubmit()
         }
     }
 

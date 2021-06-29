@@ -8,19 +8,21 @@ object Questions {
             Question(
                 text = "Who wrote the Sinead O`Connor hit Nothing Compares 2?",
                 correctAnswer = "Prince",
-                incorrectAnswers = listOf(
+                answers = listOf(
                     "Michael Jackson",
                     "Cameo",
                     "Rick James",
-                    "Pajama Sam"
+                    "Pajama Sam",
+                    "Prince"
                 )
             ),
             Question(
                 text = "Which of these musicals won the Tony Award for Best Musical?",
                 correctAnswer = "Rent",
-                incorrectAnswers = listOf(
+                answers = listOf(
                     "The Color Purple",
                     "American Idiot",
+                    "Rent",
                     "Newsies",
                     "Freddi Fish"
                 )
@@ -28,7 +30,8 @@ object Questions {
             Question(
                 text = "Which of these is NOT a Humongous Entertainment game franchise?",
                 correctAnswer = "Commander Keen",
-                incorrectAnswers = listOf(
+                answers = listOf(
+                    "Commander Keen",
                     "Pajama Sam",
                     "Putt-Putt",
                     "Freddi Fish",
@@ -38,8 +41,9 @@ object Questions {
             Question(
                 text = "In Dota 2, Wraith King was previously known as...",
                 correctAnswer = "Skeleton King",
-                incorrectAnswers = listOf(
+                answers = listOf(
                     "Reaper King",
+                    "Skeleton King",
                     "Skull King",
                     "Hell King",
                     "Putt-Putt"
@@ -48,21 +52,23 @@ object Questions {
             Question(
                 text = "In the video game Team Fortress which class is able to double jump?",
                 correctAnswer = "Scout",
-                incorrectAnswers = listOf(
+                answers = listOf(
                     "Spy",
                     "Engineer",
                     "Pyro",
+                    "Scout",
                     "Doctor"
                 )
             ),
             Question(
                 text = "What is the name of the City in Saints Row The Third?",
                 correctAnswer = "Steelport",
-                incorrectAnswers = listOf(
+                answers = listOf(
                     "Stilwater",
                     "Carcer",
                     "Liberty",
-                    "New-York"
+                    "New-York",
+                    "Steelport"
                 )
             )
         )

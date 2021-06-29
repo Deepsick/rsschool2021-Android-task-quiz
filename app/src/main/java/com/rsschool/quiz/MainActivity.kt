@@ -1,8 +1,10 @@
 package com.rsschool.quiz
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.rsschool.quiz.repository.Questions
 
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity(),
     private fun openQuestionFragment() {
         val question = questions[currentQuestionNumber - 1]
         val answer = answers.getOrNull(currentQuestionNumber - 1)
-        val isLastQuestion = currentQuestionNumber > questions.size
+        val isLastQuestion = currentQuestionNumber >= questions.size
         val fragment =
             QuestionFragment.newInstance(question, answer, currentQuestionNumber, isLastQuestion)
         replaceFragment(fragment)
@@ -67,24 +69,23 @@ class MainActivity : AppCompatActivity(),
         return ((countCorrectAnswers().toDouble() / questions.size) * 100).toInt()
     }
 
-    private fun generateReport(result: Int): String {
+    private fun generateReport(): String {
         val result = getResult()
-        val strQuestions = questions.mapIndexed() { index, question ->
+        val strQuestions = questions.mapIndexed { index, question ->
             """
-            $index) ${question.text}
-            Your answer: ${answers[index]} 
+                ${index + 1}) ${question.text}
+                Your answer: ${answers[index]} 
             """.trimIndent()
         }
 
-        return """
-Your result: $result %
-            
-${strQuestions.joinToString("\n")}
-        """.trimIndent()
+        return "Your result: $result %\n\n${strQuestions.joinToString("\n\n")}"
     }
 
-    override fun onSubmit(answer: String) {
+    override fun onRadioChecked(answer: String) {
         answers[currentQuestionNumber - 1] = answer
+    }
+
+    override fun onSubmit() {
         currentQuestionNumber++
 
         if (currentQuestionNumber > questions.size) {
@@ -102,8 +103,7 @@ ${strQuestions.joinToString("\n")}
     }
 
     override fun onShareButtonPressed() {
-        val text = generateReport(getResult())
-        println(text)
+        val text = generateReport()
         val intent = Intent(Intent.ACTION_SEND).apply {
             putExtra(Intent.EXTRA_EMAIL, arrayOf("some_email@mail.com"))
             putExtra(Intent.EXTRA_SUBJECT, "Quiz results")
@@ -111,9 +111,11 @@ ${strQuestions.joinToString("\n")}
             type = "text/plain"
         }
 
-        intent.resolveActivity(packageManager)?.let {
-            val shareIntent = Intent.createChooser(intent, null)
+        val shareIntent = Intent.createChooser(intent, null)
+        try {
             startActivity(shareIntent)
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(this, getString(R.string.no_activity_found), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -123,6 +125,6 @@ ${strQuestions.joinToString("\n")}
     }
 
     override fun onCloseButtonPressed() {
-        finish()
+        finishAffinity()
     }
 }
